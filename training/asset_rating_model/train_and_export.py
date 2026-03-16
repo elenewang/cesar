@@ -6,7 +6,7 @@ from typing import Any
 import joblib
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.preprocessing import OneHotEncoder
 
 # joblib is the recommended way to persist sklearn models (handles numpy arrays and large objects
@@ -49,13 +49,19 @@ def build_feature_matrix(df: pd.DataFrame) -> np.ndarray:
 
     return np.column_stack([surface.values, pieces.values, dept.values, type_encoded])
 
-
+# CHANGE: Added GradientBoostingRegressor models for quantile regression to predict low, mid, and high estimates of house prices.
 def train_on_dataframe(df: pd.DataFrame) -> Any:
     X = build_feature_matrix(df)
     y = df[TARGET_NAME].values.astype(np.float64)
-    reg = RandomForestRegressor(n_estimators=50, max_depth=10, random_state=42)
-    reg.fit(X, y)
-    return reg
+
+    reg_low = GradientBoostingRegressor(n_estimators=50, max_depth=10, random_state=42, loss="quantile", alpha=0.25)
+    reg_mid = GradientBoostingRegressor(n_estimators=50, max_depth=10, random_state=42, loss="quantile", alpha=0.5)
+    reg_high = GradientBoostingRegressor(n_estimators=50, max_depth=10, random_state=42, loss="quantile", alpha=0.75)
+
+    reg_low.fit(X, y)
+    reg_mid.fit(X, y)
+    reg_high.fit(X, y)
+    return reg_low, reg_mid, reg_high
 
 
 def export_artifact(

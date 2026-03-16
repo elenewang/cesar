@@ -8,8 +8,8 @@ const TYPE_OPTIONS = [
 ] as const;
 
 export type ParamsChangeCallback = (params: EstimateParams) => void;
-
-export function mountForm(container: HTMLElement, onParamsChange: ParamsChangeCallback): void {
+// CHANGE: Output type of mountForm and added setDepartment function to update the department field in the form
+export function mountForm(container: HTMLElement, onParamsChange: ParamsChangeCallback): {setDepartment: (code: string) => void} {
   const form = document.createElement("form");
   form.innerHTML = `
     <label>Surface (m²) <input type="number" name="surface" min="1" step="0.1" value="50" /></label>
@@ -27,6 +27,10 @@ export function mountForm(container: HTMLElement, onParamsChange: ParamsChangeCa
       select.appendChild(opt);
     });
   }
+
+  // ADDED: Get reference to the department input field for later updates
+  const DepartmentInput = form.querySelector<HTMLInputElement>("input[name='departement']");
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const fd = new FormData(form);
@@ -39,4 +43,12 @@ export function mountForm(container: HTMLElement, onParamsChange: ParamsChangeCa
     onParamsChange(params);
   });
   container.appendChild(form);
+
+  return {
+    setDepartment: (code: string) => {
+      if (DepartmentInput) {
+        DepartmentInput.value = code; // Update the department input field with the new code
+      }
+    },
+  };
 }

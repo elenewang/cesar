@@ -16,11 +16,12 @@ function main(): void {
   displayContainer.id = "estimate-display";
 
   app.append(formContainer, mapContainer, displayContainer);
-
-  mountForm(formContainer, (params) => {
+  // CHANGE: output of mountForm set to setDepartment
+  const { setDepartment } = mountForm(formContainer, (params) => {
     window.dispatchEvent(new CustomEvent("cesar-params-change", { detail: params }));
   });
-  mountMap(mapContainer);
+  // CHANGE: Pass setDepartment callback to mountMap to update form when a department is clicked on the map
+  mountMap(mapContainer, (code) => setDepartment(code));
   mountDisplay(displayContainer);
 }
 
