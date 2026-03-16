@@ -219,3 +219,10 @@ __marimo__/
 # CESAR artifact storage (keep .gitkeep)
 /artifact_storage/*.joblib
 /artifact_storage/contract_*.json
+
+# VSCode file
+.vscode/
+
+# Runtime junk
+node_modules/
+package-lock.json
