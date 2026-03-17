@@ -18,6 +18,8 @@ model, contract = load_artifact_from_path(
 
 mcp = FastMCP("property-estimator")
 
+*_, reg_low, reg_mid, reg_high = model
+
 @mcp.tool()
 def get_estimate(surface: float , rooms: float, department: str, property_type: str)-> str: 
     request = EstimateRequest(
@@ -26,9 +28,13 @@ def get_estimate(surface: float , rooms: float, department: str, property_type: 
         code_departement = department,
         type_local = property_type
     )
-
-    result = estimate_from_model(model,request, contract)
-    return f"Estimated property value: €{result.estimated_value_eur:,.0f}"
+    result = estimate_from_model(model, request, contract)
+    
+    return {
+        "estimated_value_eur": result.estimated_value_eur,
+        "lower_bound_eur": result.value_low_eur,
+        "upper_bound_eur": result.value_high_eur,
+    }
 
 if __name__ == "__main__":
     mcp.run()

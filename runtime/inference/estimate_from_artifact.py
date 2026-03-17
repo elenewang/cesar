@@ -44,7 +44,7 @@ def request_to_feature_row(request: EstimateRequest, contract: ContractVersion) 
 
 # CHANGE: The function estimate_from_model now returns an EstimateResponse with low, mid, and high estimates using the three GradientBoostingRegressor models trained for quantile regression.
 def estimate_from_model(model: Any, request: EstimateRequest, contract: ContractVersion) -> EstimateResponse:
-    reg_low, reg_mid, reg_high = model
+    *_,reg_low, reg_mid, reg_high = model
     X = request_to_feature_row(request, contract)
 
     pred_low = reg_low.predict(X)
