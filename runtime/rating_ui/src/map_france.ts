@@ -19,8 +19,8 @@ function style(feature: any): L.PathOptions {
 function highlightFeature(e: L.LeafletMouseEvent): void {
   const layer = e.target as L.Path;
   layer.setStyle({
-    weight: 3,
-    color: "#d9901a",
+    weight: 2,
+    color: "#c00000",
     dashArray: "",
     fillOpacity: 0.7,
   });
