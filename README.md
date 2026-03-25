@@ -19,6 +19,19 @@ Add this to ~/Library/Application Support/Claude/claude_desktop_config.json or t
   }
 }
 
+## 2. Interactive UI
+The simple UI of the map of France was rendered more dynamic through adding the following features:
+- Departments are now properly delimited by colored borders
+- Color change when user is hovering over a specific department
+- A clicking function was added. When the user clicks on a department, its postcode automatically fills in the postcode field for property estimation.
+We hope that these implemented changes can make the navigation of the UI more enjoyable for the users.
+
+## 3. Quantile Regression
+The estimations were previously being calculated using a Random Forest Regressor. We implemented three Gradient Boosting Quantile Regressors to provide more informative estimates to the user.
+Three instances of sklearn **GradientBoostingRegressor** were developed, estimating the price for the 25%, 50% and 75% quantiles.
+The 50% estimator is selected as the estimated price, while the 25% and 75% create an interval.
+Everything is displayed in the UI after an estimate action is called.
+
 # CESAR – CentraleSupelec-ESSEC System for Asset Rating
 
 CESAR is a modular system to manage the lifecycle of a property valuation model and its uses: **batch prediction** (CSV in/out), **single-record prediction** (CLI), **HTTP API** (FastAPI), **acceptance tests** against the API, **version comparison** of two APIs, and a minimal **web UI**. 
