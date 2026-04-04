@@ -34,14 +34,56 @@ cd runtime/rating_ui && npm ci
 
 ### 1. Data & Training
 
-Data sources
+**Data sources**
 
 The training pipeline relies on French property transaction data. We worked with two main sources:
 
-an initial raw DVF data used to validate the first baseline (given)
-additional cleaned Paris transaction data from DVI Ceif, including arrondissement level files
+- an initial raw DVF data used to validate the first baseline (given)
+- additional cleaned Paris transaction data from DVI Ceif, including arrondissement level files
 
 The goal of our data work was not only to clean the raw files, but also to make the expanded dataset compatible with the existing CESAR baseline training pipeline.
+
+**Cleaning the original raw data**
+
+The file was not directly ready for training, so the first step was to parse it correctly by checking the separator, quoting, and header structure before loading it into a dataframe.
+
+Then we cleaned it to obtain a format that could later match the richer cleaned format used in the project. In practice, this mainly involved:
+
+- converting the relevant columns to the right types, especially numeric values and dates
+- removing columns that were not needed for the baseline training pipeline
+- removing rows with missing values in key fields
+- keeping usable property rows for the baseline model, mainly Appartement
+- excluding rows such as Dépendance, which were not appropriate for the first baseline
+
+One difficulty was that one real estate transaction can appear on several rows in the raw data. This happens because one sale can include the main property, dependencies and one or more additional lots, which means not every row could be used directly as a training example.
+
+This first cleaning step allowed us to produce a clean dataset with a structure that could later be aligned with the richer cleaned data.
+
+**Adding and aligning new data**
+
+After the first cleaned version was prepared, additional Paris transaction data from DVI Ceif was added.
+
+These new files were already cleaner and larger than the original raw example, but they still had to follow the same cleaned structure so that everything could be combined consistently.
+
+To do this, the new data was prepared according to the same cleaned format as the first processed raw dataset.
+
+**Combining the datasets**
+
+Once both sources followed the same cleaned format, they were combined into a larger dataset. This combined dataset became the main cleaned rich dataset of the project. It gave us a much larger training base than the original raw sample and allowed us to test the CESAR baseline model on expanded data.
+
+**Preparing the model-compatible dataset**
+
+Because the existing CESAR baseline training code does not directly use the full rich schema, we then derived a simplified version of the combined dataset containing only the columns required by the current model. This model-compatible dataset was used to run the existing training pipeline without changing the baseline model structure.
+
+**Final compatibility adjustments**
+
+When testing the combined dataset with the existing CESAR model, we found that a few final adjustments were needed. 
+
+First, some type_local values in the expanded data were not supported by the baseline model. To make the model run correctly, we filtered the data to keep only the property types compatible with the current baseline, which was "Appartement" and "Maison".
+
+Then we identified one remaining row with a missing valeur_fonciere. Since valeur_fonciere is the target variable, this row had to be removed before training.
+
+After these final adjustments, the baseline CESAR training script was able to run successfully on the expanded combined dataset.
 
 ### 2. Model serving 
 
