@@ -30,8 +30,7 @@ cd runtime/rating_ui && npm ci
 ```
 
 ---
-### How it works
----
+## How it works
 
 ### 1. Data & Training
 
@@ -44,6 +43,7 @@ Set `CESAR_MODEL_PATH` and `CESAR_CONTRACT_PATH` in the environment.
 
 
 ### 3. How to access estimates
+
 ---
 
 Estimates can be retrieved through three channels depending on your use case.
@@ -109,8 +109,16 @@ with three added columns: `value_low_eur`, `value_mid_eur`, `value_high_eur`.
 Input CSV must include: `surface_reelle_bati`, `nombre_pieces_principales`,
 `code_departement`, `type_local`.
 
+For a single record:
 
----
+```bash
+cesar predict-one run --surface 50 --pieces 3 --departement 75 --type Appartement
+# From JSON file: cesar predict-one run --json one_record.json
+# JSON output:  cesar predict-one run --surface 50 --pieces 3 --departement 75 --type Appartement --json-out
+```
+
+Use `--model` / `--contract` or set `CESAR_MODEL_PATH` and `CESAR_CONTRACT_PATH`. Valid `--type` values: `Appartement`, `Maison`, `Dépendance`, `Local industriel. commercial ou assimilé`.
+
 ## System Architecture
 
 
