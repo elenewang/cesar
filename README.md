@@ -34,6 +34,15 @@ cd runtime/rating_ui && npm ci
 
 ### 1. Data & Training
 
+Data sources
+
+The training pipeline relies on French property transaction data. We worked with two main sources:
+
+an initial raw DVF data used to validate the first baseline (given)
+additional cleaned Paris transaction data from DVI Ceif, including arrondissement level files
+
+The goal of our data work was not only to clean the raw files, but also to make the expanded dataset compatible with the existing CESAR baseline training pipeline.
+
 ### 2. Model serving 
 
 ```bash
