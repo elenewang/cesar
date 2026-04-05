@@ -172,5 +172,25 @@ Use `--model` / `--contract` or set `CESAR_MODEL_PATH` and `CESAR_CONTRACT_PATH`
 
 ## System Architecture
 
+CESAR is organized into three layers: training, serving, and access. 
+
+**Training**
+
+The training pipeline is found in `training/`. It reads a CSV file, fits a quantile regression model, and exports two files to `artifact_storage/`: a `.joblib` model file and a `.json` contract file which describes the input schema and model version. 
+
+**Serving**
+
+An inference layer in `runtime/inference/` loads the model and contract files and runs the predictions. 
+
+**Access**
+
+A user has access to three entry points each targeting a specific use case:
+
+- `runtime/prediction_api/`: FastAPI HTTP server used by the Web UI and other APIs
+- `runtime/mcp_server/`: MCP server that directly exposes the model as a tool for AI agents (e.g. Claude)
+- `runtime/batch_prediction/`: reads an input CSV, runs batch estimates, and writes an output CSV. Can be used via the `cesar batch run` CLI command. 
+
+
+
 
 
