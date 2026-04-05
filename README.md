@@ -63,7 +63,7 @@ This first cleaning step allowed us to produce a clean dataset with a structure 
 
 After the first cleaned version was prepared, additional Paris transaction data from DVI Ceif was integrated. It was important for us to go with real data, and not just synthetic sales references. 
 
-The search was done arrondissement by arrondissement, by drawing a zone on a map of the city directly available on the platform. We kept only transactions between January and June of 2025 (June being the last available data) of apartments of surfaces between 30 and 120 m$^2$. 
+The search was done arrondissement by arrondissement, by drawing a zone on a map of the city directly available on the platform. We kept only transactions between January and June of 2025 (June being the last available data) of apartments of surfaces between 30 and 120 m². 
 
 This was decided because most apprtments sold in Paris are in these surfaces, and also because the website DVI Ceif allows conversion to csv for only a certain amount of references of appartments sold, limiting our searches to particular periods of time and geographical zones. This also explains why we had to do our new data retrieval arrondissement per arrondissement, and not just for the whole city at once. 
 
