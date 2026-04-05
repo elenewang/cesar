@@ -38,8 +38,8 @@ cd runtime/rating_ui && npm ci
 
 The training pipeline relies on French property transaction data. We worked with two main sources:
 
-- an initial raw DVF data used to validate the first baseline (given)
-- additional cleaned Paris transaction data from DVI Ceif, including arrondissement level files
+- an initial raw DVF data used to validate the first baseline (given), that was based in the 15th arrondissement of Paris
+- additional cleaned Paris transaction data from the platform DVI Ceif. 
 
 The goal of our data work was not only to clean the raw files, but also to make the expanded dataset compatible with the existing CESAR baseline training pipeline.
 
@@ -61,15 +61,20 @@ This first cleaning step allowed us to produce a clean dataset with a structure 
 
 **Adding and aligning new data**
 
-After the first cleaned version was prepared, additional Paris transaction data from DVI Ceif was added.
+After the first cleaned version was prepared, additional Paris transaction data from DVI Ceif was integrated. It was important for us to go with real data, and not just synthetic sales references. 
+
+The search was done arrondissement by arrondissement, by drawing a zone on a map of the city directly available on the platform. We kept only transactions between January and June of 2025 (June being the last available data) of apartments of surfaces between 30 and 120 m$^2$. 
+
+This was decided because most apprtments sold in Paris are in these surfaces, and also because the website DVI Ceif allows conversion to csv for only a certain amount of references of appartments sold, limiting our searches to particular periods of time and geographical zones. This also explains why we had to do our new data retrieval arrondissement per arrondissement, and not just for the whole city at once. 
 
 These new files were already cleaner and larger than the original raw example, but they still had to follow the same cleaned structure so that everything could be combined consistently.
 
-To do this, the new data was prepared according to the same cleaned format as the first processed raw dataset.
+To do this, the new data was prepared according to the same cleaned format as the first processed raw dataset, using a simple notebook called `dataCleaning_DCICeif.ipynb`. 
+This notebook processes the new data arrondissement per arrondissement, stores it in separate csv files in a folder (data/per_arrondissement) and then combines all these into one single csv file. This allowed us to have more than 4,600 lines in our final csv data file. 
 
 **Combining the datasets**
 
-Once both sources followed the same cleaned format, they were combined into a larger dataset. This combined dataset became the main cleaned rich dataset of the project. It gave us a much larger training base than the original raw sample and allowed us to test the CESAR baseline model on expanded data.
+Once both sources (already available & new one retrieved) followed the same cleaned format, they were combined into a larger dataset. This combined dataset became the main cleaned rich dataset of the project. It gave us a much larger training base than the original raw sample and allowed us to test the CESAR baseline model on expanded data.
 
 **Preparing the model-compatible dataset**
 
