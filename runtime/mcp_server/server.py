@@ -30,11 +30,11 @@ def get_estimate(surface: float , rooms: float, department: str, property_type: 
     )
     result = estimate_from_model(model, request, contract)
     
-    return {
-        "estimated_value_eur": result.estimated_value_eur,
-        "lower_bound_eur": result.value_low_eur,
-        "upper_bound_eur": result.value_high_eur,
-    }
+    return (
+        f"Median: {result.estimated_value_eur:,.0f} €\n"
+        f"Lower Bound: {result.value_low_eur:,.0f} €\n"
+        f"Upper Bound: {result.value_high_eur:,.0f} €"
+    )
 
 if __name__ == "__main__":
     mcp.run()
